@@ -27,18 +27,18 @@ clear ; close all; clc
 data = load('ex2data2.txt');
 X = data(:, [1, 2]); y = data(:, 3);
 
-plotData(X, y);
+% plotData(X, y);
 
 % Put some labels
-hold on;
+% hold on;
 
 % Labels and Legend
-xlabel('Microchip Test 1')
-ylabel('Microchip Test 2')
+% xlabel('Microchip Test 1')
+% ylabel('Microchip Test 2')
 
 % Specified in plot order
-legend('y = 1', 'y = 0')
-hold off;
+% legend('y = 1', 'y = 0')
+% hold off;
 
 
 %% =========== Part 1: Regularized Logistic Regression ============
@@ -108,6 +108,8 @@ initial_theta = zeros(size(X, 2), 1);
 
 % Set regularization parameter lambda to 1 (you should vary this)
 lambda = 1;
+lambda0 = 0;
+lambda100 = 100;
 
 % Set Options
 options = optimset('GradObj', 'on', 'MaxIter', 400);
@@ -116,10 +118,24 @@ options = optimset('GradObj', 'on', 'MaxIter', 400);
 [theta, J, exit_flag] = ...
 	fminunc(@(t)(costFunctionReg(t, X, y, lambda)), initial_theta, options);
 
+[theta0, J0, exit_flag0] = ...
+	fminunc(@(t)(costFunctionReg(t, X, y, lambda0)), initial_theta, options);
+
+[theta100, J100, exit_flag100] = ...
+	fminunc(@(t)(costFunctionReg(t, X, y, lambda100)), initial_theta, options);
+
 % Plot Boundary
 plotDecisionBoundary(theta, X, y);
 hold on;
 title(sprintf('lambda = %g', lambda))
+
+plotDecisionBoundary(theta0, X, y);
+hold on;
+title(sprintf('lambda = %g', lambda0))
+
+plotDecisionBoundary(theta100, X, y);
+hold on;
+title(sprintf('lambda = %g', lambda100))
 
 % Labels and Legend
 xlabel('Microchip Test 1')
